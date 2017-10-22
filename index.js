@@ -54,20 +54,32 @@ app.get('/groups', (req, res) => {
 
 app.post('/signup', function (req, res) {
 // if user is logged in, don't let them sign up again
-    if (!req.user) {
-      return res.redirect('/');
-    }
+    // if (!req.user) {
+    //   return res.redirect('/');
+    // }
 
-    var new_user = new User({ username: req.body.username });
+    var new_user = new User({
+    username: req.body.username,
+    email: req.body.email
+    // password: req.body.password
+  });
+    // var user = new User();
+    //   //set the users information that comes from requests
+    //   user.username = req.body.username;
+    //   user.email = req.body.email;
+    //   user.password = req.body.password;
+
     User.register(new_user, req.body.password,
       function (err, newUser) {
         passport.authenticate('local')(req, res, function() {
           console.log("SIGNUP SUCCESS")
-          res.redirect('/');
+          // res.redirect('/');
+          res.json({ success: true, message: 'Successfully created new user.' })
         });
       }
     );
 });
+
 
 app.post('/login', passport.authenticate('local'), function (req, res) {
   console.log(JSON.stringify(req.user));
@@ -98,7 +110,7 @@ app.get('/:userId/groups', (req, res) => {
 
 
 
-    // listen on port 3000
-app.listen(3000, function() {
+    // listen on port 4000
+app.listen(4000, function() {
   console.log('server started');
 });
