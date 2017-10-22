@@ -8,7 +8,7 @@ var UserSchema = new Schema({
   email: String,
   password: String
 });
-UserSchema.plugin(passportLocalMongoose);
+// UserSchema.plugin(passportLocalMongoose);
 
 var GroupSchema = new Schema({
   groupName: String,
