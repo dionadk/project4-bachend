@@ -4,7 +4,7 @@ var passportLocalMongoose = require('passport-local-mongoose');
 var ObjectId = Schema.ObjectId
 
 var UserSchema = new Schema({
-  username: String,
+  userName: String,
   email: String,
   password: String
 });

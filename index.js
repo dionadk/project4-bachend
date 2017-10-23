@@ -13,10 +13,10 @@ const Todo = mongoose.model('Todo')
 
 
     //  NEW ADDITIONS
-    cookieParser = require('cookie-parser')
-    session = require('express-session')
-    passport = require('passport')
-    LocalStrategy = require('passport-local').Strategy;
+const cookieParser = require('cookie-parser')
+const session = require('express-session')
+const passport = require('passport')
+const LocalStrategy = require('passport-local').Strategy;
 
     // middleware for auth
     app.use(parser.urlencoded({extended:false}))
@@ -60,6 +60,27 @@ console.log( res)
   });
 });
 
+app.get("/api/users/:userId", (req,res) => {
+  User.findOne({_id: req.params.userId})
+  .then((user) => {
+    res.json(user)
+  })
+})
+
+app.get('/creategroup', (req,res) => {
+  Group.create(req.body)
+       .then((group) => {
+         res.json(group)
+       })
+})
+
+app.get('/:userId/groups', (req, res) => {
+    Group.find({user: req.params.userId})
+    .then((groups) => {
+        res.json(groups)
+    })
+})
+
 app.get('/api/groups', (req, res) => {
     Group.find({})
     .then((groups) => {
@@ -73,8 +94,54 @@ app.get('/api/todos', (req, res) => {
     })
 })
 
+app.get('/api/users/:userId/todos', (req,res) => {
+    Todo.find({user: req.params.userId})
+    .then((todo) => {
+      res.json(todo)
+    })
+})
+app.post('/api/users/:userId/updatetodo', function(req,res){
+  Todo.findOneAndUpdate({_id: req.params.userId},req.body,{new: true})
+      .then((todo) => {
+          res.json(todo);
+  })
+})
+app.post('/api/users/:userId/deletetodo', function(req, res){
+  Todo.findOneAndRemove({_id: req.params.userId}, function(){
+    res.json("/")
+  })
+})
+
+app.post('/api/todos', (req, res) => {
+    Todo.create(req.body)
+        .then((todo) => {
+            res.json(todo)
+        })
+})
+
 // passport authentication
 
+// app.get('/', function (req, res) {
+//   res.render('index', {user: JSON.stringify(req.user) + "|| null" });
+// });
+//
+// app.get('/signup', function (req, res) {
+//   // don't let the user signup again if they already exist
+//   if (req.user) {
+//     return res.redirect('/');
+//   }
+//   res.render('signup'); // signup form
+// });
+//
+// app.get('/login', function (req, res) {
+//   // if user is logged in, don't let them see login view
+//   if (req.user) {
+//     return res.redirect('/');
+//   }
+//
+//   res.render('login'); // you can also use res.sendFile
+// });
+//
 // app.post('/api/users', function (req, res) {
 // // if user is logged in, don't let them sign up again
 //     // if (!req.user) {
@@ -86,12 +153,12 @@ app.get('/api/todos', (req, res) => {
 //     email: req.body.email
 //     // password: req.body.password
 //   });
-    // var user = new User();
-    //   //set the users information that comes from requests
-    //   user.username = req.body.username;
-    //   user.email = req.body.email;
-    //   user.password = req.body.password;
-
+//     var user = new User();
+//       //set the users information that comes from requests
+//       user.username = req.body.username;
+//       user.email = req.body.email;
+//       user.password = req.body.password;
+//
 //     User.register(new_user, req.body.password,
 //       function (err, newUser) {
 //         passport.authenticate('local')(req, res, function() {
@@ -115,20 +182,8 @@ app.get('/api/todos', (req, res) => {
 //   console.log("AFTER logout", req.user);
 //   res.redirect('/');
 // });
-//
-// app.get('/creategroup', (req,res) => {
-//   Group.create(req.body)
-//        .then((group) => {
-//          res.json(group)
-//        })
-// })
-//
-// app.get('/:userId/groups', (req, res) => {
-//     Group.find({user: req.params.userId})
-//     .then((groups) => {
-//         res.json(groups)
-//     })
-// })
+
+
 
 
 

@@ -5,18 +5,18 @@ var Access = mongoose.model('Access')
 var Todo = mongoose.model('Todo')
 
 user1 = new User({
-  username: 'dio',
+  userName: 'dio',
   email: 'dio@gmail.com',
   password: 'test12345'
 })
 user2 = new User({
-  username: 'kurien',
+  userName: 'kurien',
   email: 'kk@gmail.com',
   password: 'password12345'
 })
 
 user1group = new Group({
-    groupname: 'dk',
+    groupName: 'dk',
     user: user1._id
 })
 user1Todo = new Todo({
