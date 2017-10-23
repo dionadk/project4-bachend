@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 var Schema = mongoose.Schema
 var passportLocalMongoose = require('passport-local-mongoose');
-// var ObjectId = Schema.ObjectId
+var ObjectId = Schema.ObjectId
 
 var UserSchema = new Schema({
   username: String,
@@ -28,6 +28,14 @@ var AccessSchema = new Schema({
     ref: 'Group'
   }
 })
+var TodoSchema = new Schema({
+  item: String,
+  isCompleted: false,
+  user: {
+    type: Schema.ObjectId,
+    ref: 'User'
+  }
+});
 
 // let uri = 'mongodb://dionadk:project4@ds227525.mlab.com:27525/trip_db'
 // mongoose.connect(uri, function(err, db) {
@@ -41,4 +49,5 @@ mongoose.connect('mongodb://localhost/project4-backend')
 var User = mongoose.model('User', UserSchema);
 var Group = mongoose.model('Group', GroupSchema);
 var Access = mongoose.model('Access', AccessSchema);
+var Todo = mongoose.model('Todo', TodoSchema);
 module.exports = mongoose;

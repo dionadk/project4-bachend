@@ -9,6 +9,7 @@ const app = express()
 const User = mongoose.model('User')
 const Group = mongoose.model('Group')
 const Access = mongoose.model('Access')
+const Todo = mongoose.model('Todo')
 
 
     //  NEW ADDITIONS
@@ -59,10 +60,16 @@ console.log( res)
   });
 });
 
-app.get('/groups', (req, res) => {
+app.get('/api/groups', (req, res) => {
     Group.find({})
     .then((groups) => {
         res.json(groups)
+    })
+})
+app.get('/api/todos', (req, res) => {
+    Todo.find({})
+    .then((todos) => {
+        res.json(todos)
     })
 })
 
