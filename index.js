@@ -10,6 +10,7 @@ const User = mongoose.model('User')
 const Group = mongoose.model('Group')
 const Access = mongoose.model('Access')
 const Todo = mongoose.model('Todo')
+const Journel = mongoose.model('Journel')
 
 
     //  NEW ADDITIONS
@@ -49,16 +50,30 @@ app.get('/api/users', (req, res) => {
     })
 })
 app.post("/api/users", (req, res) => {
-console.log(req);
-console.log( res)
-  User.create(req.body).then(user => {
-    console.log("post api/users", req.body);
-    console.log("user:", user)
-    // res.json('/users/'+ user.username)
-    res.json(user)
-
-  });
+User.findOne({email: req.body.email}).then((user) => {
+  if(user == null){
+      User.create(req.body).then(user => {
+        res.json(user)
+      });
+  }
+  else {
+    res.json(null)
+  }
+})
 });
+
+
+app.post("/api/login", (req,res) => {
+  console.log(req.params);
+  User.findOne({email: req.body.email, password: req.body.password})
+  .then((user) => {
+    console.log(user);
+    if(user == null)
+      res.json(null)
+    else
+      res.json(user)
+  })
+})
 
 app.get("/api/users/:userId", (req,res) => {
   User.findOne({_id: req.params.userId})
@@ -117,6 +132,26 @@ app.post('/api/todos', (req, res) => {
         .then((todo) => {
             res.json(todo)
         })
+})
+
+app.get('/api/journels', (req, res) => {
+    Journel.find({})
+    .then((journel) => {
+        res.json(journel)
+    })
+})
+
+app.post('/api/journels', (req, res) => {
+    Journel.create(req.body)
+        .then((journel) => {
+            res.json(journel)
+        })
+})
+app.get('/api/users/:userId/journels', (req,res) => {
+      Journel.find({user: req.params.userId})
+      .then((journel) => {
+        res.json(journel)
+      })
 })
 
 // passport authentication

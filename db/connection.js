@@ -37,6 +37,17 @@ var TodoSchema = new Schema({
   }
 });
 
+var JournelSchema = new Schema({
+  moment: String,
+  place: String,
+  image: String,
+  date: String,
+  user: {
+    type: Schema.ObjectId,
+    ref: 'User'
+  }
+});
+
 // let uri = 'mongodb://dionadk:project4@ds227525.mlab.com:27525/trip_db'
 // mongoose.connect(uri, function(err, db) {
 //     if(err) {
@@ -50,4 +61,5 @@ var User = mongoose.model('User', UserSchema);
 var Group = mongoose.model('Group', GroupSchema);
 var Access = mongoose.model('Access', AccessSchema);
 var Todo = mongoose.model('Todo', TodoSchema);
+var Journel = mongoose.model('Journel', JournelSchema);
 module.exports = mongoose;
