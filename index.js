@@ -102,9 +102,9 @@ app.get('/api/groups', (req, res) => {
 //         })
 // })
 //create a new group and add it to the user who created the group
-app.post('api/users/:userId', (req,res) {
-  User.findOne({email: req.body.email})
-  .then(user){
+app.post('api/users/:userId', (req,res) => {
+  User.findOne({_id: req.body._id})
+  .then((user) => {
     user.group.push(new Group({groupName: req.body.groupName, memberEmail: req.body.memberEmail}))
     user.save(function(err, results){
       if(err){
@@ -112,10 +112,10 @@ app.post('api/users/:userId', (req,res) {
       }
       else{
         console.log(results);
-        res.json(user)
+        res.json(group)
       }
     })
-  }
+  })
 })
 // check if user is within a group in user table and give access
 

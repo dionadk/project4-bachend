@@ -3,6 +3,11 @@ var Schema = mongoose.Schema
 // var passportLocalMongoose = require('passport-local-mongoose');
 var ObjectId = Schema.ObjectId
 
+var GroupSchema = new Schema({
+  groupName: String,
+  memberEmail: String
+});
+
 var UserSchema = new Schema({
   userName: String,
   email: String,
@@ -19,10 +24,7 @@ var UserSchema = new Schema({
 //     ref: 'User'
 //   }
 // });
-var GroupSchema = new Schema({
-  groupName: String,
-  memberEmail: String
-});
+
 
 // var AccessSchema = new Schema({
 //   user: {

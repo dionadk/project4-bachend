@@ -9,7 +9,7 @@ user1 = new User({
   userName: 'dio',
   email: 'dio@gmail.com',
   password: 'test12345',
-  groups: [user1group]
+  groups: []
 })
 user2 = new User({
   userName: 'kurien',
@@ -22,10 +22,10 @@ user2 = new User({
 //     memberEmail: 'kk@gmail.com',
 //     user: user1._id
 // })
-user1group = new Group ({
-  groupName: 'diona',
-  memberEmail: 'kk@gmail.com'
-})
+// user1group = new Group ({
+//   groupName: 'diona',
+//   memberEmail: 'kk@gmail.com'
+// })
 user1Todo = new Todo({
     item: 'finish project',
     isCompleted: false,
@@ -40,7 +40,7 @@ user1Journel = new Journel({
 })
 
 userSeeds = [user1,user2]
-groupSeeds = [user1group]
+// groupSeeds = [user1group]
 todoSeeds = [user1Todo]
 journelSeeds = [user1Journel]
 
