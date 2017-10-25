@@ -8,7 +8,7 @@ const app = express()
 
 const User = mongoose.model('User')
 const Group = mongoose.model('Group')
-const Access = mongoose.model('Access')
+// const Access = mongoose.model('Access')
 const Todo = mongoose.model('Todo')
 const Journel = mongoose.model('Journel')
 
@@ -82,19 +82,12 @@ app.get("/api/users/:userId", (req,res) => {
   })
 })
 
-app.get('/creategroup', (req,res) => {
-  Group.create(req.body)
-       .then((group) => {
-         res.json(group)
-       })
-})
-
-app.get('/:userId/groups', (req, res) => {
-    Group.find({user: req.params.userId})
-    .then((groups) => {
-        res.json(groups)
-    })
-})
+// app.get('/:userId/groups', (req, res) => {
+//     Group.find({user: req.params.userId})
+//     .then((groups) => {
+//         res.json(groups)
+//     })
+// })
 
 app.get('/api/groups', (req, res) => {
     Group.find({})
@@ -102,6 +95,30 @@ app.get('/api/groups', (req, res) => {
         res.json(groups)
     })
 })
+// app.post('/api/groups', (req, res) => {
+//     Group.create(req.body)
+//         .then((group) => {
+//             res.json(group)
+//         })
+// })
+//create a new group and add it to the user who created the group
+app.post('api/users/:userId', (req,res) {
+  User.findOne({email: req.body.email})
+  .then(user){
+    user.group.push(new Group({groupName: req.body.groupName, memberEmail: req.body.memberEmail}))
+    user.save(function(err, results){
+      if(err){
+        console.log(err)
+      }
+      else{
+        console.log(results);
+        res.json(user)
+      }
+    })
+  }
+})
+// check if user is within a group in user table and give access
+
 app.get('/api/todos', (req, res) => {
     Todo.find({})
     .then((todos) => {
@@ -115,14 +132,14 @@ app.get('/api/users/:userId/todos', (req,res) => {
       res.json(todo)
     })
 })
-app.post('/api/users/:userId/updatetodo', function(req,res){
-  Todo.findOneAndUpdate({_id: req.params.userId},req.body,{new: true})
+app.post('/api/todos/:_id/updatetodo', function(req,res){
+  Todo.findOneAndUpdate({_id: req.params._id},req.body,{new: true})
       .then((todo) => {
           res.json(todo);
   })
 })
-app.post('/api/users/:userId/deletetodo', function(req, res){
-  Todo.findOneAndRemove({_id: req.params.userId}, function(){
+app.post('/api/todos/:_id/deletetodo', function(req, res){
+  Todo.findOneAndRemove({_id: req.params._id}, function(){
     res.json("/")
   })
 })
@@ -153,6 +170,18 @@ app.get('/api/users/:userId/journels', (req,res) => {
         res.json(journel)
       })
 })
+app.post('/api/journels/:_id/updatejournel', function(req,res){
+  Journel.findOneAndUpdate({_id: req.params._id},req.body,{new: true})
+      .then((journel) => {
+          res.json(journel);
+  })
+})
+app.post('/api/journels/:_id/deletejournel', function(req, res){
+  Journel.findOneAndRemove({_id: req.params._id}, function(){
+    res.json("/")
+  })
+})
+
 
 // passport authentication
 

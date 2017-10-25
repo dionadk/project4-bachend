@@ -1,14 +1,15 @@
-const mongoose = require('./connection')
+const mongoose = require('./connection.js')
 var User = mongoose.model('User')
 var Group = mongoose.model('Group')
-var Access = mongoose.model('Access')
+// var Access = mongoose.model('Access')
 var Todo = mongoose.model('Todo')
 var Journel = mongoose.model('Journel')
 
 user1 = new User({
   userName: 'dio',
   email: 'dio@gmail.com',
-  password: 'test12345'
+  password: 'test12345',
+  groups: [user1group]
 })
 user2 = new User({
   userName: 'kurien',
@@ -16,9 +17,14 @@ user2 = new User({
   password: 'password12345'
 })
 
-user1group = new Group({
-    groupName: 'dk',
-    user: user1._id
+// user1group = new Group({
+//     groupName: 'diona',
+//     memberEmail: 'kk@gmail.com',
+//     user: user1._id
+// })
+user1group = new Group ({
+  groupName: 'diona',
+  memberEmail: 'kk@gmail.com'
 })
 user1Todo = new Todo({
     item: 'finish project',
