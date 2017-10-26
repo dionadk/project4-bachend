@@ -70,6 +70,12 @@ mongoose.connect(uri, function(err, db) {
 })
 // mongoose.connect('mongodb://localhost/project4-backend')
 
+if (process.env.NODE_ENV == "production") {
+    mongoose.connect(process.env.MLAB_URL)
+} else {
+    mongoose.connect("mongodb://localhost/project3-back")
+}
+
 var User = mongoose.model('User', UserSchema);
 var Group = mongoose.model('Group', GroupSchema);
 // var Access = mongoose.model('Access', AccessSchema);
