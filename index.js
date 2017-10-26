@@ -335,6 +335,6 @@ app.post('/api/journels/:_id/deletejournel', function(req, res){
 
 
     // listen on port 4000
-app.listen(4000, function() {
-  console.log('server started');
-});
+    app.listen(process.env.PORT || 4000, function () {
+        console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
+    });
