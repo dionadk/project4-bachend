@@ -49,6 +49,7 @@ app.get('/api/users', (req, res) => {
         console.log("hi")
     })
 })
+//sign up
 app.post("/api/users", (req, res) => {
 User.findOne({email: req.body.email}).then((user) => {
   if(user == null){
@@ -75,6 +76,7 @@ app.post("/api/login", (req,res) => {
   })
 })
 
+
 app.get("/api/users/:userId", (req,res) => {
   User.findOne({_id: req.params.userId})
   .then((user) => {
@@ -82,40 +84,72 @@ app.get("/api/users/:userId", (req,res) => {
   })
 })
 
-// app.get('/:userId/groups', (req, res) => {
-//     Group.find({user: req.params.userId})
+app.get('/api/groups',(req,res) => {
+  Group.find({})
+  .then((groups) => {
+    res.json(groups)
+  })
+})
+
+app.get('api/:groupId/users', (req, res) => {
+    User.find({group: req.params.groupId})
+    .then((users) => {
+        res.json(users)
+    })
+})
+
+// app.get('/api/groups', (req, res) => {
+//     Group.find({})
 //     .then((groups) => {
 //         res.json(groups)
 //     })
 // })
+// app.post("/api/groups", (req,res) => {
+//   console.log(req.params);
+//   User.findOne({email: req.body.memberEmail})
+//   .then((user) => {
+//     console.log(user);
+//     if(user == null)
+//       res.json(null)
+//     else {
+//     Group.create(req.body)
+//         .then((group) => {
+//           res.json(group)
+//         })
+//       }
+//   })
+// })
+//create a new group and add it to the user who created the group
+// app.post('api/users/:userId', (req,res) => {
+//   console.log(req)
+//   User.findOne({_id: req.params.userId})
+//   .then((user) => {
+//     user.group.push(new Group({groupName: req.body.groupName, memberEmail: req.body.memberEmail}))
+//     group.save(function(err, results){
+//       if(err){
+//         console.log(err)
+//       }
+//       else{
+//         console.log(results);
+//         res.json(group)
+//       }
+//     })
+//   })
+// })
 
-app.get('/api/groups', (req, res) => {
-    Group.find({})
-    .then((groups) => {
-        res.json(groups)
-    })
-})
 // app.post('/api/groups', (req, res) => {
 //     Group.create(req.body)
 //         .then((group) => {
 //             res.json(group)
 //         })
 // })
-//create a new group and add it to the user who created the group
-app.post('api/users/:userId', (req,res) => {
-  User.findOne({_id: req.body._id})
-  .then((user) => {
-    user.group.push(new Group({groupName: req.body.groupName, memberEmail: req.body.memberEmail}))
-    user.save(function(err, results){
-      if(err){
-        console.log(err)
-      }
-      else{
-        console.log(results);
+
+app.post('/api/groups', (req,res) => {
+  Group.create(req.body)
+      .then((group) => {
         res.json(group)
-      }
-    })
   })
+
 })
 // check if user is within a group in user table and give access
 
@@ -138,6 +172,21 @@ app.post('/api/todos/:_id/updatetodo', function(req,res){
           res.json(todo);
   })
 })
+
+app.post('/api/:_id/addmember', function(req,res){
+  console.log(req.params.familyuser);
+  User.update(
+    {
+        _id: req.params.familyuser,
+    },
+    {
+        $set: { 'user.$.family': 'user.$.email'}
+    }, function(err, count) {
+           if (err) return next(err);
+           callback(err, count);
+});
+})
+
 app.post('/api/todos/:_id/deletetodo', function(req, res){
   Todo.findOneAndRemove({_id: req.params._id}, function(){
     res.json("/")

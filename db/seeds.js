@@ -5,16 +5,22 @@ var Group = mongoose.model('Group')
 var Todo = mongoose.model('Todo')
 var Journel = mongoose.model('Journel')
 
+group1 = new Group({
+  groupName: 'dionadk',
+  memberEmail: 'kk@gmail.com'
+})
+
 user1 = new User({
   userName: 'dio',
   email: 'dio@gmail.com',
   password: 'test12345',
-  groups: []
+  group: group1._id
 })
 user2 = new User({
   userName: 'kurien',
   email: 'kk@gmail.com',
-  password: 'password12345'
+  password: 'password12345',
+  group: group1._id
 })
 
 // user1group = new Group({
@@ -49,10 +55,10 @@ User.remove({})
   User.collection.insert(userSeeds)
 })
 
-Group.remove({})
-.then(() => {
-  Group.collection.insert(groupSeeds)
-})
+// Group.remove({})
+// .then(() => {
+//   Group.collection.insert(groupSeeds)
+// })
 
 
 Todo.remove({})
