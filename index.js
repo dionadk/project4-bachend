@@ -152,7 +152,7 @@ app.post('/api/addMember', (req,res) => {
       }
       else {
         console.log(creator)
-        $push: {users: req.body.user}
+        $push: {users: user}
       }
     })
   })
