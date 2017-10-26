@@ -2,10 +2,9 @@
 // require express and other modules
 const express = require('express')
 const parser = require('body-parser')
-let mongoose = require('./db/connection.js')
-const cors =require('cors')
+const mongoose = require('./db/connection.js')
+const cors = require('cors')
 const app = express()
-
 const User = mongoose.model('User')
 const Group = mongoose.model('Group')
 // const Access = mongoose.model('Access')
@@ -43,11 +42,10 @@ const LocalStrategy = require('passport-local').Strategy;
 //     app.set('view engine', 'hbs');
 
 app.get('/api/users', (req, res) => {
-    User.find({})
-    .then((user) => {
-        res.json(user)
-        console.log("hi")
-    })
+  User.find({}).then((user) => {
+    res.json(user)
+    console.log("hi")
+  })
 })
 //sign up
 app.post("/api/users", (req, res) => {
@@ -76,6 +74,25 @@ app.post("/api/login", (req,res) => {
   })
 })
 
+app.post("/api/grouplogin", (req,res) => {
+  console.log("start from here")
+  console.log(req)
+  User.findOne({email: req.body.email,password: req.body.password})
+  .then((user) => {
+    if(user == null)
+      res.json(null)
+    else {
+      console.log("hi there")
+    Group.findOne({groupName: req.body.groupEmail})
+    console.log(group)
+    .then((group) => {
+          res.json(group.creator)
+        });
+      }
+    })
+
+  })
+
 
 app.get("/api/users/:userId", (req,res) => {
   User.findOne({_id: req.params.userId})
@@ -84,6 +101,33 @@ app.get("/api/users/:userId", (req,res) => {
   })
 })
 
+app.post("/api/users", (req, res) => {
+User.findOne({email: req.body.email}).then((user) => {
+  if(user == null){
+      User.create(req.body).then(user => {
+        res.json(user)
+      });
+  }
+  else {
+    res.json(null)
+  }
+})
+});
+
+// app.post('/api/createGroup', (req, res) => {
+//   console.log(req)
+//     Group.findOne({groupName: req.body.groupName}).then((group) => {
+//
+//       if(group == null){
+//         Group.create(req.body).then(group => {
+//           res.json(group)
+//         });
+//       }
+//       else {
+//         res.json(null)
+//       }
+//     })
+// });
 app.get('/api/groups',(req,res) => {
   Group.find({})
   .then((groups) => {
@@ -91,19 +135,36 @@ app.get('/api/groups',(req,res) => {
   })
 })
 
-app.get('api/:groupId/users', (req, res) => {
-    User.find({group: req.params.groupId})
-    .then((users) => {
-        res.json(users)
+app.post('/api/createGroup', (req, res) => {
+    Group.create(req.body)
+        .then((group) => {
+            res.json(group)
+        })
+})
+// add a member
+app.post('/api/addMember', (req,res) => {
+  User.findOne({email: req.body.member}).then((user) => {
+      res.json(user)
+    Group.findOneAndUpdate({creator: req.body.creator}).then((group) => {
+      if(group == null){
+        console.log("no response")
+        res.json(null)
+      }
+      else {
+        console.log(creator)
+        $push: {users: req.body.user}
+      }
+    })
+  })
+})
+
+app.get('/api/users/:userId/groups', (req, res) => {
+    Group.find({user: req.params.userId})
+    .then((group) => {
+        res.json(group)
     })
 })
 
-// app.get('/api/groups', (req, res) => {
-//     Group.find({})
-//     .then((groups) => {
-//         res.json(groups)
-//     })
-// })
 // app.post("/api/groups", (req,res) => {
 //   console.log(req.params);
 //   User.findOne({email: req.body.memberEmail})
@@ -137,20 +198,6 @@ app.get('api/:groupId/users', (req, res) => {
 //   })
 // })
 
-// app.post('/api/groups', (req, res) => {
-//     Group.create(req.body)
-//         .then((group) => {
-//             res.json(group)
-//         })
-// })
-
-app.post('/api/groups', (req,res) => {
-  Group.create(req.body)
-      .then((group) => {
-        res.json(group)
-  })
-
-})
 // check if user is within a group in user table and give access
 
 app.get('/api/todos', (req, res) => {
@@ -171,20 +218,6 @@ app.post('/api/todos/:_id/updatetodo', function(req,res){
       .then((todo) => {
           res.json(todo);
   })
-})
-
-app.post('/api/:_id/addmember', function(req,res){
-  console.log(req.params.familyuser);
-  User.update(
-    {
-        _id: req.params.familyuser,
-    },
-    {
-        $set: { 'user.$.family': 'user.$.email'}
-    }, function(err, count) {
-           if (err) return next(err);
-           callback(err, count);
-});
 })
 
 app.post('/api/todos/:_id/deletetodo', function(req, res){

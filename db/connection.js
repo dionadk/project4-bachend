@@ -3,24 +3,21 @@ var Schema = mongoose.Schema
 // var passportLocalMongoose = require('passport-local-mongoose');
 var ObjectId = Schema.ObjectId
 
-
-
-
-var GroupSchema = new Schema({
-  groupName: String,
-  memberEmail: String,
-});
-
 var UserSchema = new Schema({
   userName: String,
   email: String,
   password: String,
-  group: {
-    type: Schema.ObjectId,
-    ref: 'Group'
-  }
 });
 
+var GroupSchema = new Schema({
+  groupName: String,
+  memberEmail: String,
+  creator: {
+    type: Schema.Types.ObjectId,
+    ref: 'User'
+  },
+  users: [UserSchema]
+});
 
 // UserSchema.plugin(passportLocalMongoose);
 
@@ -71,10 +68,10 @@ mongoose.connect(uri, function(err, db) {
         return
     }
 })
-mongoose.connect('mongodb://localhost/project4-backend')
+// mongoose.connect('mongodb://localhost/project4-backend')
 
-var Group = mongoose.model('Group', GroupSchema);
 var User = mongoose.model('User', UserSchema);
+var Group = mongoose.model('Group', GroupSchema);
 // var Access = mongoose.model('Access', AccessSchema);
 var Todo = mongoose.model('Todo', TodoSchema);
 var Journel = mongoose.model('Journel', JournelSchema);
