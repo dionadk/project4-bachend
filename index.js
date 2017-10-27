@@ -108,11 +108,20 @@ app.get('/api/groups',(req,res) => {
 })
 
 app.post('/api/createGroup', (req, res) => {
-    Group.create(req.body)
-        .then((group) => {
-            res.json(group)
-        })
+  console.log(req.groupName)
+  Group.findOne({groupName: req.body.groupName}).then((group) => {
+    console.log(group)
+    if(group == null){
+      Group.create(req.body).then(group => {
+        res.json(group)
+      })
+    }
+    else {
+      res.json(null)
+    }
+  })
 })
+
 // add a member to group
 app.post('/api/addMember', (req,res) => {
   //check if member exists
