@@ -84,7 +84,10 @@ app.post("/api/grouplogin", (req,res) => {
       //find the shared group and access that page
     Group.findOne({groupName: req.body.groupEmail})
     .then((group) => {
-      console.log(group.creator);
+        if(group == null)
+          res.json(null)
+        else
+      console.log(group.creator)
           res.json(group.creator)
         });
       }
@@ -128,15 +131,11 @@ app.post('/api/addMember', (req,res) => {
   User.findOne({email: req.body.member}).then((user) => {
       res.json(user)
       //find the group and push member to group
-    Group.findOne({creator: req.body.creator}, function(err, group){
+    Group.findOne({creator: req.body.creator}).then((group) => {
       group.users.push(user)
-      group.save(function(err, results){
-        if(err){
-          console.log(err)
-        }
-        else{
-              console.log(group);
-        }
+      group.save((group) => {
+        console.log(group)
+        res.json(group)
       })
     })
   })
