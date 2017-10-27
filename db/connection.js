@@ -21,26 +21,6 @@ var GroupSchema = new Schema({
 
 // UserSchema.plugin(passportLocalMongoose);
 
-// var GroupSchema = new Schema({
-//   groupName: String,
-//   memberEmail: String,
-//   user: {
-//     type: Schema.ObjectId,
-//     ref: 'User'
-//   }
-// });
-
-
-// var AccessSchema = new Schema({
-//   user: {
-//     type: Schema.ObjectId,
-//     ref: 'User'
-//   },
-//   group: {
-//     type: Schema.ObjectId,
-//     ref: 'Group'
-//   }
-// })
 var TodoSchema = new Schema({
   item: String,
   isCompleted: false,
