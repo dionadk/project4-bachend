@@ -189,6 +189,14 @@ app.get('/api/journels', (req, res) => {
         res.json(journel)
     })
 })
+app.post('/api/journels/:_id/updatejournel', function(req,res){
+  console.log("hi there")
+  Journel.findOneAndUpdate({_id: req.params._id},req.body,{new: true})
+  console.log(res)
+      .then((journel) => {
+          res.json(journel);
+  })
+})
 
 app.post('/api/journels', (req, res) => {
     Journel.create(req.body)
@@ -205,12 +213,6 @@ app.get('/api/users/:userId/journels', (req,res) => {
       })
 })
 
-app.post('/api/journels/:_id/updatejournel', function(req,res){
-  Journel.findOneAndUpdate({_id: req.params._id},req.body,{new: true})
-      .then((journel) => {
-          res.json(journel);
-  })
-})
 app.post('/api/journels/:_id/deletejournel', function(req, res){
   Journel.findOneAndRemove({_id: req.params._id}, function(){
     res.json("/")
