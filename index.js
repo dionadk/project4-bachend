@@ -192,7 +192,6 @@ app.get('/api/journels', (req, res) => {
 app.post('/api/journels/:_id/updatejournel', function(req,res){
   console.log("hi there")
   Journel.findOneAndUpdate({_id: req.params._id},req.body,{new: true})
-  console.log(res)
       .then((journel) => {
           res.json(journel);
   })
