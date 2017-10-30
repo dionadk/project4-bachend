@@ -193,15 +193,18 @@ app.get('/api/journels', (req, res) => {
 app.post('/api/journels', (req, res) => {
     Journel.create(req.body)
         .then((journel) => {
+          console.log(journel)
             res.json(journel)
         })
 })
+
 app.get('/api/users/:userId/journels', (req,res) => {
       Journel.find({user: req.params.userId})
       .then((journel) => {
         res.json(journel)
       })
 })
+
 app.post('/api/journels/:_id/updatejournel', function(req,res){
   Journel.findOneAndUpdate({_id: req.params._id},req.body,{new: true})
       .then((journel) => {
