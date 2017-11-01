@@ -143,9 +143,9 @@ app.post('/api/addMember', (req,res) => {
 
 app.get('/api/users/:userId/groups', (req, res) => {
   console.log("hi")
-    Group.find({"users._id": req.params.userId}, function(err, foundUsers){
+    Group.findOne({"users._id": req.params.userId}, function(err, foundUsers){
 
-    //  console.log(foundUsers)
+    console.log(foundUsers)
      res.json(foundUsers)
    })
 })
