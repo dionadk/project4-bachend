@@ -142,10 +142,12 @@ app.post('/api/addMember', (req,res) => {
 })
 
 app.get('/api/users/:userId/groups', (req, res) => {
-    Group.find({user: req.params.userId})
-    .then((group) => {
-        res.json(group)
-    })
+  console.log("hi")
+    Group.find({"users._id": req.params.userId}, function(err, foundUsers){
+
+    //  console.log(foundUsers)
+     res.json(foundUsers)
+   })
 })
 // end of group routes
 

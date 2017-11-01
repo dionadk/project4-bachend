@@ -41,14 +41,14 @@ var JournelSchema = new Schema({
   }
 });
 
-let uri = 'mongodb://project4:password4@ds227525.mlab.com:27525/trip_db'
-mongoose.connect(uri, function(err, db) {
-    if(err) {
-        console.log('Error, unable to connect to db')
-        return
-    }
-})
-// mongoose.connect('mongodb://localhost/project4-backend')
+// let uri = 'mongodb://project4:password4@ds227525.mlab.com:27525/trip_db'
+// mongoose.connect(uri, function(err, db) {
+//     if(err) {
+//         console.log('Error, unable to connect to db')
+//         return
+//     }
+// })
+mongoose.connect('mongodb://localhost/project4-backend')
 
 if (process.env.NODE_ENV == "production") {
     mongoose.connect(process.env.MLAB_URL)
